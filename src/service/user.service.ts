@@ -6,13 +6,25 @@ import { UpdateUserDto } from "../dto/update-user.dto"
 
 @Injectable()
 export class UserService {
+    /**
+     * User repository.
+     */
     private userRepository = AppDataSource.getRepository(User);
 
+    /**
+     * Creates user with fields described in class CreateUserDto.
+     * @param user - The user information.
+    */
     async create(user: CreateUserDto) {
         user['hasSubscription'] = false;
         return await this.userRepository.save(user);
     }
 
+    /**
+     * Updates user information with fields described in class UpdateUserDto.
+     * @param id - The id of user.
+     * @param updatedUser - The changed user information.
+    */
     async update(id: number, updatedUser: UpdateUserDto) {
         const user = await this.userRepository.findOneBy({ 
             id: id
@@ -28,6 +40,10 @@ export class UserService {
         return `User ${id} successfully changed.`
     }
 
+    /**
+     * Removes user.
+     * @param id - The id of user.
+    */
     async remove(id: number) {
         const user = await this.userRepository.findOneBy({
             id: id
@@ -39,6 +55,9 @@ export class UserService {
         return `User ${id} successfully removed.`;
     }
 
+    /**
+     * Gets names and lastnames of all users.
+    */
     async getAll() {
         return await this.userRepository
             .createQueryBuilder("user")
@@ -46,12 +65,20 @@ export class UserService {
             .getMany();
     }
 
+    /**
+     * Gets all information about user.
+     * @param id - The id of user.
+    */
     async getById(id: number) {
         return await this.userRepository.findOneBy({
             id: id
         });
     }
 
+    /**
+     * Checks if user has subscription.
+     * @param id - The id of user.
+    */
     async hasSubscription(id: number) {
         let user = await this.userRepository.findOneBy({
             id: id
@@ -62,6 +89,10 @@ export class UserService {
         return user.hasSubscription;
     }
 
+    /**
+     * Buys subscription for user if user has no subscription.
+     * @param id - The id of user.
+    */
     async buySubscription(id: number) {
         let user = await this.userRepository.findOneBy({
             id: id

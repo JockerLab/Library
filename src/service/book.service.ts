@@ -7,14 +7,29 @@ import { UserService } from "./user.service";
 
 @Injectable()
 export class BookService {
+    /**
+     * User service.
+     */
     private userService = new UserService();
+    /**
+     * Book repository.
+     */
     private bookRepository = AppDataSource.getRepository(Book);
 
+    /**
+     * Adds book with fields described in class AddBookDto.
+     * @param book - The book information.
+    */
     async add(book: AddBookDto) {
         await this.bookRepository.save(book);
         return 'Book was successfully added.';
     }
 
+    /**
+     * Takes book for user.
+     * @param bookId - The id of book.
+     * @param userId - The id of user.
+    */
     async takeBook(bookId: number, userId: number) {
         let numberUserBooks = await this.bookRepository
             .createQueryBuilder("book")
@@ -46,6 +61,10 @@ export class BookService {
         return `User ${userId} successfully took a book ${book.id}.`
     }
 
+    /**
+     * Returns book.
+     * @param id - The id of book.
+    */
     async returnBook(id: number) {
         let book = await this.bookRepository.findOneBy({
             id: id
