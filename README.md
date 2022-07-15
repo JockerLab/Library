@@ -22,6 +22,40 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+## Описание API методов
+
+`GET /users` — вывести имена и фамилии всех пользователей;<br />
+`GET /users/:id` — вывести информацию об одном пользователе пользователе с идентификатором `:id`;<br />
+`POST /users` — создать пользователя (информация указывается в теле запроса). Пример тела запроса:
+```
+{
+  "firstName": "Name",
+  "lastName": "Surname",
+  "age": 100
+}
+```
+`PUT /users` — изменить информацию о пользователе (информация указывается в теле запроса). Пример тела запроса:
+```
+{
+  "firstName": "AnotherName",
+  "lastName": "AnotherSurname",
+  "age": 101
+}
+```
+`DElETE /users/:id` — удалить пользователя с идентификатором `:id`;<br />
+`GET /users/:id/subscription` — проверить, есть ли у пользователя с идентификатором `:id` абонемент;<br />
+`POST /users/:id/subscription` — купить пользователю с идентификатором `:id` абонемент;<br />
+`POST /books` — добавить книгу (информация указывается в теле запроса). Пример тела запроса:
+```
+{
+  "name": "Name",
+  "author": "Author",
+  "text": "Text"
+}
+```
+`GET /books/:bookId/user/:userId` — получить пользователю с идентификатором `:userId` книгу с идентификатором `:bookId`;<br />
+`DELETE /books/:bookId` — вернуть книгу с идентификатором `:bookId`.<br />
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
