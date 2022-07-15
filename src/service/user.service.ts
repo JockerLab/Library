@@ -17,18 +17,26 @@ export class UserService {
         const user = await this.userRepository.findOneBy({ 
             id: id
         });
+        if (user === null) {
+            return `User ${id} is not exists.`;
+        }
         user.firstName = updatedUser.firstName;
         user.lastName = updatedUser.lastName;
         user.age = updatedUser.age;
         user.hasSubscription = updatedUser.hasSubscription;
-        return await this.userRepository.save(user);
+        await this.userRepository.save(user);
+        return `User ${id} successfully changed.`
     }
 
     async remove(id: number) {
         const user = await this.userRepository.findOneBy({
             id: id
         });
-        return await this.userRepository.remove(user);
+        if (user === null) {
+            return `User ${id} is not exists.`;
+        }
+        await this.userRepository.remove(user);
+        return `User ${id} successfully removed.`;
     }
 
     async getAll() {
@@ -48,6 +56,9 @@ export class UserService {
         let user = await this.userRepository.findOneBy({
             id: id
         });
+        if (user === null) {
+            return `User ${id} is not exists.`;
+        }
         return user.hasSubscription;
     }
 
@@ -55,6 +66,9 @@ export class UserService {
         let user = await this.userRepository.findOneBy({
             id: id
         });
+        if (user === null) {
+            return `User ${id} is not exists.`;
+        }
         if (user.hasSubscription) {
             return `User ${id} is already have subscription.`;
         }

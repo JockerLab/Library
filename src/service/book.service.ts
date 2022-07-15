@@ -11,7 +11,8 @@ export class BookService {
     private bookRepository = AppDataSource.getRepository(Book);
 
     async add(book: AddBookDto) {
-        return await this.bookRepository.save(book);
+        await this.bookRepository.save(book);
+        return 'Book was successfully added.';
     }
 
     async takeBook(bookId: number, userId: number) {
@@ -24,14 +25,21 @@ export class BookService {
             .leftJoinAndSelect('book.user', 'user')
             .where('book.id = :bookId', { bookId })
             .getOne();
+        let user = await this.userService.getById(userId);
+        if (book === null) {
+            return `Book ${bookId} is not exists.`;
+        }
+        if (user === null) {
+            return `User ${userId} is not exists.`;
+        }
         if (book.user !== null) {
             return `Book ${bookId} is not free.`;
         }
-        if (numberUserBooks === 5) {
-            return `User ${userId} cannot take book ${bookId}, maximum 5 books.`;
-        }
         if (!(await this.userService.hasSubscription(userId))) {
             return `User ${userId} has no subscription.`;
+        }
+        if (numberUserBooks === 5) {
+            return `User ${userId} cannot take book ${bookId}, maximum 5 books.`;
         }
         book.user = userId;
         await this.bookRepository.save(book);
@@ -42,6 +50,9 @@ export class BookService {
         let book = await this.bookRepository.findOneBy({
             id: id
         });
+        if (book === null) {
+            return `Book ${id} is not exists.`;
+        }
         book.user = null;
         await this.bookRepository.save(book);
         return `Book ${id} was successfully returned.`
